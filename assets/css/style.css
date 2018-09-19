@@ -31,6 +31,10 @@ html body {
     font-weight: bold;
     font-size: 35px;
 }
+.banner {
+    max-width: 800px;
+    height: auto;
+}
 
 #myCard {
     position: relative;
@@ -38,7 +42,6 @@ html body {
     font-size: 20px;
     margin-bottom: 50px;
     display: flex;
-    justify-content: center;
 }
 
 .myChoices {
@@ -53,5 +56,7 @@ html body {
 }
 
 .newBtn {
-
+    position: absolute;
+    top: 50%;
+    left: 43%;
 }

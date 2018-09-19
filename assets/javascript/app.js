@@ -1,6 +1,7 @@
 // some global variables
 let time = 30;
 let qnCounter = 0;
+let newDiv, card;
 let int;
 let isCorrect = false;
 // questions bank
@@ -82,21 +83,29 @@ let trivia = {
     },
     showResults: function () {
         clearInterval(int);
-        let card = $("#myCard");
-        card.empty();
+        card = $("#myCard");
+        card.hide('slow');
 
-        let newBtn = $("<input>", { type: "button", class: " center newBtn btn btn-info", id: "restart", value: "Click to Restart"  });
+        newDiv = $('<div>');
+        let newBtn = $("<input>", { type: "button", class: "center newBtn btn btn-info", id: "restart", value: "Click to Restart"  });
 
-        card.css('background-image', 'url(./assets/images/results.jpg)')
-            .css('background-size', 'auto 100%')
-            //.css('background-repeat', 'no-repeat')
-            .css('color', 'white')
-            .css('padding', ' 20px 0 310px 0');
-        card.append(`<h2 class="card-title">Your Results</h2><hr>
+        newDiv.append(`<h2 class="card-title">Your Results</h2><hr>
             <p>Correct: ${this.correct}</p>
             <p>Wrong: ${this.incorrect}</p>
             <p>Unanswered: ${this.unanswered}</p>`);
-        card.append(newBtn);
+        newDiv.css('background-image', 'url(./assets/images/results.jpg)')
+            .css('background-size', 'auto 100%')
+            .css('color', 'white')
+            .css('padding', ' 20px 0 310px 0');
+        newDiv.append(newBtn);
+        $(".container").append(newDiv);
+    },
+    restart: function () {
+        qnCounter = 0;
+        card.show();
+        newDiv.empty();
+        newDiv.css("display", "none");
+        this.next();
     }
 };
 
@@ -113,10 +122,9 @@ $(document).ready(function() {
         let str = this.textContent.trim();
         console.log(str);
         trivia.choiceChecker(str);
-    })
+    });
 
-    $(".newBtn").on("click", function () {
-        qnCounter = 0;
-        trivia.timer();
-    })
+    $('.container').on('click', '.newBtn', function (event) {
+        trivia.restart();
+    });
 });
