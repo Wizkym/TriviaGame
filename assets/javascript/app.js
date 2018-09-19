@@ -14,7 +14,7 @@ newQn = {qn: "Which dimension are our Rick and Morty (ostensibly) from?", choice
 questions.push(newQn);
 newQn = {qn: "Which substance is Rick addicted to?", choices: ["Opium", "Alcohol", "Cocaine", "Tobacco"], ans: "Alcohol"};
 questions.push(newQn);
-newQn = {qn: "What was Jerry’s apple-based ad slogan?", choices: ["Got Apples?", "Apples: they're great", "Hungry for apples", "Where are the apples"], ans: "Got Apples"};
+newQn = {qn: "What was Jerry’s apple-based ad slogan?", choices: ["Got Apples?", "Apples: they're great", "Hungry for apples", "Where are the apples"], ans: "Got Apples?"};
 questions.push(newQn);
 newQn = {qn: "What food does Rick turn himself into?", choices: ["Onion", "Pickle", "Banana", "Cucumber"], ans: "Pickle"};
 questions.push(newQn);
@@ -58,6 +58,12 @@ let trivia = {
             let qnSlot = $("#question");
             qnSlot.text(questions[qnCounter].qn);   // displays the current question
 
+            // update progress bar
+            let width = (qnCounter * 10);
+            let progress = $( ".progress-bar" );
+            progress.attr( {"aria-valuenow": qnCounter.toString() + '0', });
+            progress.css('width', width.toString() + '%');
+
             // populate the choices for the question
             for (let x = 0; x < questions[qnCounter].choices.length; x++) {
                 $("#choice" + (x + 1)).text(questions[qnCounter].choices[x]);
@@ -71,22 +77,25 @@ let trivia = {
             }
         }
 
-        if ((!time <= 0) && (isCorrect) && (qnCounter < 9)) {  // if player picks a correct answer
+        if ((!time <= 0) && (isCorrect) && (qnCounter <= 9)) {  // if player picks a correct answer
             this.correct++;
             this.next();
-        } else if ((!time <= 0) && (!isCorrect) && (qnCounter < 9)) { // if player picks a wrong answer
+        } else if ((!time <= 0) && (!isCorrect) && (qnCounter <= 9)) { // if player picks a wrong answer
             this.incorrect++;
+             let i = setInterval(() =>{
+
+             }, 5000);
             this.next();
-        } else if ((qnCounter = 9)) {       // if all questions are done
+        } else if ((qnCounter > 9)) {       // if all questions are done
             this.showResults();
         }
     },
     showResults: function () {
-        clearInterval(int);
+        clearInterval(int);         // clear the set interval
         card = $("#myCard");
-        card.hide('slow');
+        card.hide('slow');          // hide the card holding the questions & choices
 
-        newDiv = $('<div>');
+        newDiv = $('<div>', {id: 'resultDiv'});     //define the results div
         let newBtn = $("<input>", { type: "button", class: "center newBtn btn btn-info", id: "restart", value: "Click to Restart"  });
 
         newDiv.append(`<h2 class="card-title">Your Results</h2><hr>
@@ -101,10 +110,11 @@ let trivia = {
         $(".container").append(newDiv);
     },
     restart: function () {
-        qnCounter = 0;
+        qnCounter = -1;
+        this.correct = 0;
+        this.incorrect = 0;
+        this.unanswered = 0;
         card.show();
-        newDiv.empty();
-        newDiv.css("display", "none");
         this.next();
     }
 };
@@ -125,6 +135,7 @@ $(document).ready(function() {
     });
 
     $('.container').on('click', '.newBtn', function (event) {
+        $('#resultDiv').remove();       // purge the dynamic div
         trivia.restart();
     });
 });
