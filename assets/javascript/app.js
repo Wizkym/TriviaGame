@@ -4,6 +4,7 @@ let qnCounter = 0;
 let newDiv, card;
 let int;
 let isCorrect = false;
+let graded = false;
 // questions bank
 const questions = [];
 let newQn = {qn: "Which song do Rick and Morty use to save the world?", choices: ["Get Shrinky", "Get Schwifty", "Get Springy", "Get Splurgey"], ans: "Get Schwifty"};
@@ -35,6 +36,7 @@ let trivia = {
         isCorrect = false;
         time = 30;
         qnCounter++;
+        graded = false;
         this.timer();
     },
     timer: function () {// controls time
@@ -42,7 +44,8 @@ let trivia = {
           int = setInterval(() =>{      // fat arrow functions for the win
             if (time <= 0) {     // if time runs out
                 this.unanswered++;
-                this.next();
+                let unan = 'Hmm.. you\'re outta time! Ans: ';
+                this.flash(isCorrect, questions[qnCounter].ans, unan);
             }
             else {
                 time--;
@@ -79,15 +82,35 @@ let trivia = {
 
         if ((!time <= 0) && (isCorrect) && (qnCounter <= 9)) {  // if player picks a correct answer
             this.correct++;
-            this.next();
         } else if ((!time <= 0) && (!isCorrect) && (qnCounter <= 9)) { // if player picks a wrong answer
             this.incorrect++;
-             let i = setInterval(() =>{         // fat arrow functions for the win!!!!
-             }, 5000);
-            this.next();
         } else if ((qnCounter > 9)) {       // if all questions are done
             this.showResults();
         }
+        graded = true;
+        this.flash(isCorrect, questions[qnCounter].ans, "");       // displays the correct answer and status
+    },
+    flash: function (bol, ans, x) {
+        clearInterval(int);
+        let result;
+
+        if (bol) {
+            result = 'Correct! \n ' + ans;
+        } else {
+            if ((!bol) && (x === "")) {
+            result = 'Wrong! The answer is: ' + ans;
+            }else {
+                result = x + ans;
+            }
+        }
+
+        $('.card-body').append(`<p class="result">${result}</p>`);
+
+        setTimeout(function(){
+            $(`.result`).remove();
+            trivia.next();
+        }, 5000);
+
     },
     showResults: function () {
         clearInterval(int);         // clear the set interval
@@ -130,7 +153,9 @@ $(document).ready(function() {
     $(".myChoices").on("click", function () {
         let str = this.textContent.trim();
         console.log(str);
-        trivia.choiceChecker(str);
+
+        if (!graded) {
+        trivia.choiceChecker(str);}
     });
 
     $('.container').on('click', '.newBtn', function (event) {
