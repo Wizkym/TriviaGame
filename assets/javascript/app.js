@@ -91,22 +91,22 @@ let trivia = {
         this.flash(isCorrect, questions[qnCounter].ans, "");       // displays the correct answer and status
     },
     flash: function (bol, ans, x) {
-        clearInterval(int);
-        let result;
+        clearInterval(int);     // stop the timer
+        let result;             // declare variable to store the result output
 
         if (bol) {
-            result = 'Correct! \n ' + ans;
+            result = 'Correct! \n ' + ans;     // correct choice
         } else {
             if ((!bol) && (x === "")) {
-            result = 'Wrong! The answer is: ' + ans;
+            result = 'Wrong! The answer is: ' + ans;    // wrong choice
             }else {
-                result = x + ans;
+                result = x + ans;   // unanswered
             }
         }
 
-        $('.card-body').append(`<p class="result">${result}</p>`);
+        $('.card-body').append(`<h3 class="result">${result}</h3>`);
 
-        setTimeout(function(){
+        setTimeout(function(){      // removes the result after 5 seconds
             $(`.result`).remove();
             trivia.next();
         }, 5000);
@@ -117,13 +117,15 @@ let trivia = {
         card = $("#myCard");
         card.hide('slow');          // hide the card holding the questions & choices
 
-        newDiv = $('<div>', {id: 'resultDiv'});     //define the results div
+        newDiv = $('<div>', {id: 'resultDiv'});     // define the results div
         let newBtn = $("<input>", { type: "button", class: "center newBtn btn btn-info", id: "restart", value: "Click to Restart"  });
 
+        // add the result elements
         newDiv.append(`<h2 class="card-title">Your Results</h2><hr>
             <p>Correct: ${this.correct}</p>
             <p>Wrong: ${this.incorrect}</p>
             <p>Unanswered: ${this.unanswered}</p>`);
+        // customize the div
         newDiv.css('background-image', 'url(./assets/images/results.jpg)')
             .css('background-size', 'auto 100%')
             .css('color', 'white')
@@ -131,7 +133,7 @@ let trivia = {
         newDiv.append(newBtn);
         $(".container").append(newDiv);
     },
-    restart: function () {
+    restart: function () {      // when the restart button is clicked
         qnCounter = -1;
         this.correct = 0;
         this.incorrect = 0;
@@ -154,7 +156,7 @@ $(document).ready(function() {
         let str = this.textContent.trim();
         console.log(str);
 
-        if (!graded) {
+        if (!graded) {      // prevents the game from accepting multiple answers
         trivia.choiceChecker(str);}
     });
 
