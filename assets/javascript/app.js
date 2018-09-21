@@ -39,7 +39,7 @@ let trivia = {
     },
     timer: function () {// controls time
         clearInterval(int);
-          int = setInterval(() =>{
+          int = setInterval(() =>{      // fat arrow functions for the win
             if (time <= 0) {     // if time runs out
                 this.unanswered++;
                 this.next();
@@ -82,8 +82,7 @@ let trivia = {
             this.next();
         } else if ((!time <= 0) && (!isCorrect) && (qnCounter <= 9)) { // if player picks a wrong answer
             this.incorrect++;
-             let i = setInterval(() =>{
-
+             let i = setInterval(() =>{         // fat arrow functions for the win!!!!
              }, 5000);
             this.next();
         } else if ((qnCounter > 9)) {       // if all questions are done
