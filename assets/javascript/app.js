@@ -86,13 +86,13 @@ let trivia = {
     graded = false;
     this.timer();
   },
+  // controls time
   timer: function () {
-    // controls time
     clearInterval(int);
+    // fat arrow functions for the win
     int = setInterval(() => {
-      // fat arrow functions for the win
+      // if time runs out
       if (time <= 0) {
-        // if time runs out
         this.unanswered++;
         let unan = "Hmm.. you're outta time! Ans: ";
         this.flash(isCorrect, questions[qnCounter].ans, unan);
@@ -103,10 +103,10 @@ let trivia = {
     }, 1000);
     this.populate();
   },
+  // displays the questions and choices
   populate: function () {
-    // displays the questions and choices
+    // if quiz is over
     if (qnCounter > 9) {
-      // if quiz is over
       this.showResults();
     } else {
       let qnSlot = $("#question");
@@ -124,8 +124,8 @@ let trivia = {
       }
     }
   },
+  // checks for the correct choices
   choiceChecker: function (choice) {
-    // checks for the correct choices
     for (let x = 0; x < questions[qnCounter].choices.length; x++) {
       if (choice === questions[qnCounter].ans) {
         isCorrect = true;
@@ -161,8 +161,8 @@ let trivia = {
 
     $(".card-body").append(`<h3 class="result">${result}</h3>`);
 
+    // removes the result after 5 seconds
     setTimeout(function () {
-      // removes the result after 5 seconds
       $(`.result`).remove();
       trivia.next();
     }, 5000);
